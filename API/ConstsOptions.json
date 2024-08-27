@@ -1,0 +1,37 @@
+{
+  "RepositoryOptions": {
+    "AuditExpirationDays": 7,
+    "HotGoodsExpirationHours": 24,
+    "CacheExpirationMins": 5
+  },
+  "ServicesOptions": {
+    "GoodsImagesLinkTemplate": "https://localhost:53861/goodsimages/",
+    "BonusesForTelegram": 10,
+    "BonusesForBirthdate": 10
+  },
+  "TelegramOptions": {
+    "TgBotToken": "",////////////////////////////////////////////////
+    "HostTgId": "",//////////////////////////////////////////////////
+    "HostAuthAccesMinutes": 5
+  },
+  "HostAuth": {
+    "Login": "HostLogin",
+    "Password": "HostPassword"
+  },
+  "Serilog": {
+    "MinimumLevel": "Information",
+    "WriteTo": [
+      {
+        "Name": "Console"
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "path": "logs/log-.txt",
+          "rollingInterval": "Day",
+          "outputTemplate": "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
+       }
+      }
+   ]
+  }
+}

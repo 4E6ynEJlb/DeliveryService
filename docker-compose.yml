@@ -1,0 +1,72 @@
+version: '3.4'
+
+services:
+  api:
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: API/Dockerfile
+    restart: always
+    depends_on: 
+      - database-sql
+      - cache
+      - database-mongo
+      - minio
+      - grafana
+      - loki
+  database-sql:
+     image:  mcr.microsoft.com/mssql/server:2022-latest
+     environment: 
+       - ACCEPT_EULA=Y
+       - MSSQL_SA_PASSWORD=SQLPassword123
+     restart: always
+     ports:
+       - "1433:1433"
+  cache:
+     image: redis
+     ports: 
+       - "6379:6379"
+     restart: always
+  database-mongo:
+     image: mongo:4.4.6
+     ports:
+       - "27017:27017"
+     restart: always
+  minio:
+    container_name: minio
+    restart: always
+    image: minio/minio
+    volumes:
+      - miniodata:/data
+    expose:
+      - "9000"
+    ports:
+      - "9000:9000"
+    command: server /data
+  loki:
+    image: grafana/loki:master
+    ports:
+       - 3100:3100
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: always
+  grafana:
+    image: grafana/grafana:master
+    environment:
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./provisioning/plugins:/etc/grafana/provisioning/plugins
+      - ./grafanaConfiguration:/etc/grafana/provisioning/
+      - ./provisioning/notifiers:/etc/grafana/provisioning/notifiers
+    depends_on:
+      - loki
+    restart: always
+volumes:
+  miniodata:
+  grafana: ~
+  loki: ~
