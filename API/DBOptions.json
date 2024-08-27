@@ -1,0 +1,28 @@
+{
+  "SQLConnectionStrings": {
+    "DefaultConnection": "Server=database-sql,1433;Database=DeliveryService;User=sa;Password={0};Trust Server Certificate=True"
+  },
+  "RedisConnectionOptions": {
+    "Configuration": "cache",
+    "InstanceName": "deliveryservice"
+  },
+  "MongoOptions": {
+    "MongoDefaultConnection": "mongodb://host.docker.internal:27017",
+    "DBName": "DeliveryService",
+    "SoldGoodsCollectionName": "sold",
+    "ReportsCollectionName": "reports",
+    "OrdersCollectionName": "orders",
+    "AuditRecordsCollectionName": "audit"
+  },
+  "MinIoOptions": {
+    "AccessKey": "minioadmin",
+    "SecretKey": "minioadmin",
+    "Endpoint": "minio:9000",
+    "Bucket": "images"
+  },
+  "LokiOptions": {
+    "User": "admin",
+    "Password": "admin",
+    "URI": "http://host.docker.internal:3100"
+  }
+}
